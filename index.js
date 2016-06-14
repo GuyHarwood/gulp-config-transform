@@ -5,7 +5,8 @@ var _ = require('lodash'),
     shell = require('gulp-shell'),
     gutil = require('gulp-util'),
     fileExists = require('file-exists'),
-    file = require('gulp-file');
+    file = require('gulp-file'),
+    guid = require('guid');
 
 require('es6-promise').polyfill();
 
@@ -78,7 +79,7 @@ function createProj(options) {
 
     return Promise.all([
         new Promise(function(resolve, reject) {
-            file('_msbuild.proj', _project, { src: true })
+            file(options.projFile, _project, { src: true })
                 .pipe(gulp.dest('.'))
                 .on('end', resolve)
         })
@@ -94,14 +95,15 @@ function transform(options) {
         netVersion: '4',
         framework: 'x64',
         msBuildPath: undefined,
-        assemblyFile: undefined
+        assemblyFile: undefined,
+        projFile: guid.create().toString() + '.proj'
     }, options);
 
 
     setup(options);
 
     return createProj(options).then(function() {
-        return gulp.task('transform', shell.task(options.msBuildPath + ' ./_msbuild.proj /t:Transform'));
+        return gulp.task('transform', shell.task(options.msBuildPath + ' ./' + options.projFile + ' /t:Transform'));
     });
 }
 

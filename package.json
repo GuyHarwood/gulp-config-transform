@@ -32,6 +32,9 @@
     "lodash": "^3.9.3",
     "file-exists": "1.0.0",
     "gulp-file": "0.2.0",
-    "es6-promise": "*"
+    "es6-promise": "*",
+    "guid": "0.0.12"
+  },
+  "devDependencies": {
   }
 }
